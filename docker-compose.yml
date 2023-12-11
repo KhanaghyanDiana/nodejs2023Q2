@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  nestjs_app:
+    build: .
+    image: khanaghyandiana985/nodejs2023q2:v1.0.0
+    ports:
+      - "1115:${DOCKER_PORT}"
+    depends_on:
+      - postgres_db
+    environment:
+      - DATABASE_URL=postgres://postgres:777post@host.docker.internal:5432/crud
+    networks:
+     - app_network
+  postgres_db:
+    image: postgres
+    container_name: postgres_container
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:${DB_PORT}"
+    networks:
+      - app_network
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+volumes:
+  pgdata:
+networks:
+  app_network:
+    driver: bridge
